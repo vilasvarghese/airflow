@@ -1,0 +1,30 @@
+Ensure in docker-compose postgres is listening on some port 
+	say 5432 
+
+	docker exec -it postgres-container-id bash
+	#su postgres
+	psql -U airflow
+	\list
+		equivalent of show databases;
+			list db
+	\c postgres;
+		equivalent of use database;
+	CREATE DATABASE test;
+	
+	
+	Create a connection 
+		Admin -> Connections 
+		Click +
+		
+		
+		conn id: postgres_localhost
+		conn type: Postgres
+		desc: <blank>
+		Host: postgres 
+				this name should match service name in docker-compose 
+				alternatively host.docker.internal for win/mac
+		Login: airflow
+		Password: airflow 
+		Port: 5432
+		Save 
+			

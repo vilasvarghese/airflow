@@ -1,0 +1,1524 @@
+
+----------------
+Airflow 
+	open-source platform 
+		designed to 
+			automate and 
+			manage 
+				workflows
+					especially data pipelines. 
+	Simplifies 
+		scheduling, 
+		monitoring, and 
+		running 
+			complex sequences of tasks. 
+
+Key concepts to get you started with Airflow:
+
+DAGs: 
+	Directed Acyclic Graphs
+	Helps to define workflow 
+What it Does:
+	Workflow Orchestration: 
+		Airflow excels at 
+			define and 
+			execute 
+				workflows 
+					as Directed Acyclic Graphs (DAGs). 
+	DAGs 
+		essentially blueprints 
+			that specify 
+				tasks
+				their dependencies, and 
+				the order of execution.
+	Scheduling & Automation: 
+		Airflow acts as a central scheduler
+		automatically trigger tasks 
+			based on pre-defined schedules 
+		or 
+			dependencies on other tasks.
+	Monitoring & Visualization: 
+		The platform provides a user interface 
+			to monitor the status of 
+				DAGs and 
+				individual tasks. 
+	You can 
+		visualize workflow execution, 
+		identify errors, and 
+		track progress.
+
+What is Airflow™?
+	“Workflows as code” 
+Apache Airflow™ 
+	open-source platform for 
+		developing
+		scheduling, and 
+		monitoring 
+			batch-oriented workflows. 
+	Airflow’s extensible Python framework enables to 
+		build workflows 
+			connecting with virtually any technology. 
+	Has web interface 
+		manage the state of your workflows. 
+	Airflow is deployable in many ways
+		single process on your laptop 
+		to a 
+			distributed setup to support even the biggest workflows.
+
+Workflows as code
+	Main characteristic of Airflow workflows 
+		all workflows are defined in Python code. 
+	“Workflows as code” serves several purposes:
+
+Benefits of Using Airflow:
+
+	Reduced Complexity: 
+		Airflow 
+			manage workflows, 
+			eliminate custom scripting and 
+			error-prone manual execution.
+	Scalability: 
+		Handle a large volume of tasks and workflows
+		suitable for complex enterprise data pipelines.
+	Monitoring & Centralized Control: 
+		single point of control 
+			to 
+				monitor and manage 
+					all your workflows.
+	Extensibility: 
+		Rich ecosystem of 
+			plugins and operators (an action within a task)
+				can integrate with 
+					various tools and 
+					data sources.
+	Community & Support: 
+		open-source
+			large and active community 
+			provides resources and support.
+
+
+	Dynamic: 
+		Airflow pipelines 
+			configured as Python code
+			allow dynamic pipeline generation.
+
+	Extensible: 
+		The Airflow™ framework 
+			contains operators to 
+				connect with numerous technologies. 
+			All Airflow components are 
+				extensible 
+				easily adjust to your environment.
+
+	Flexible: 
+		fWorkflow parameterization is built-in leveraging the Jinja templating engine
+
+Core Concepts and components(Airflow Architecture
+-------------------------------------------------:
+
+
+Airflow
+	find the python version dependency
+		3.6.7 or greater?
+	python3 --version
+ apt install python3.10-venv
+	python3 -m venv py_env
+	source py_env/bin/activate 
+		will be in py_env dir.
+	
+	search google and install airflow from github 
+	
+	export AIRFLOW_HOME=. (in #py_env dir)
+	airflow db init 
+	
+	airflow webserver -p 8080
+		click on a link that comes up 
+	airflow users create --username admin --firstname firstname --lastname lastname --role Admin --email admin@domain.in 
+		enter pwd
+		
+	airflow webserver -p 8080
+	
+	
+	on vscode
+		source py_env/bin/activate 
+		export AIRFLOW_HOME=.
+		airflow scheduler 
+		
+	
+
+airflow commands 
+-------------------
+	airflow db init 
+	airflow db reset
+	airflow db upgrade 
+	airflow webserver 
+	airflow scheduler 
+	airflow celery worker
+	airflow dags list 
+	airflow dags trigger example..
+	airflow dags list-runs -d example...
+	airflow dags backfill -s 2021-01-01 -e 2021-01-05 --reset-dagruns 
+	airflow task list 
+	airflow task list task-name 
+	airflow tasks test 
+	airflow tasks test example_bash_operator runme_0 2021-01-01
+	airflow -h 
+	
+Simple docker installation 
+	D:\PraiseTheLord\HSBGInfotech\Airflow\airflow-materials\airflow-materials\airflow-section-2\docs
+		no scheduler 
+		just to get idea 
+		
+
+Database Commands:
+
+    airflow db init: 
+		initializes the Airflow metadata database. 
+		It creates the necessary tables in your database 
+			(usually PostgreSQL) 
+			to store information about your 
+				DAGs, 
+				task runs, and 
+				other Airflow metadata.
+
+    airflow db reset: 
+		resets (drops and creates new tables etc and seeds data ) the Airflow metadata database. 
+		drops all existing tables 
+		re-initializes the database schema. 
+		Use this command with caution as it will erase all your DAG and task run history.
+
+    airflow db upgrade: 
+		upgrades the Airflow metadata database schema to the latest version. 
+		It's used when you upgrade Airflow itself and the database schema might have changed.
+
+Airflow Services:
+
+    airflow webserver: 
+		Starts the Airflow web server. 
+		The web server provides a user interface for Airflow where you can view 
+			DAGs, 
+			monitor task runs, 
+			trigger DAG runs manually, and 
+			manage configurations.
+
+    airflow scheduler: 
+		starts the Airflow scheduler. 
+		The scheduler is responsible for 
+			monitoring DAGs and 
+			triggering their runs based on the defined schedule.
+
+    airflow celery worker: 
+		starts an Airflow worker process. 
+		Workers are responsible for executing the tasks defined within your DAGs. 
+		Airflow uses Celery for distributed task execution.
+
+DAG Management:
+
+    airflow dags list: 
+		lists all the DAGs currently available in your Airflow environment.
+
+    airflow dags trigger <DAG_ID>: 
+		triggers a manual run of the specified DAG (identified by <DAG_ID>).
+
+    airflow dags list-runs -d <DAG_ID>: 
+		lists all the past runs of a specific DAG (identified by <DAG_ID>).
+
+    airflow dags backfill -s <start_date> -e <end_date> --reset-dagruns: 
+		backfills a specific date range for a DAG. 
+		Schedules and runs the DAG for each date 
+			within the specified start and end date range (<start_date> and <end_date>). 
+		The --reset-dagruns flag ensures existing runs for those dates are cleared before backfilling.
+
+Task Management:
+
+    airflow task list: 
+		lists all the tasks defined within all your DAGs.
+
+    airflow task list <task_name>: 
+		lists all instances of a specific task (identified by <task_name>) across all DAGs.
+
+    airflow tasks test: 
+		allows you to test tasks locally. 
+		specify the 
+			DAG ID
+			task ID, and 
+			execution date 
+				to test a specific task instance.
+
+    airflow tasks test <DAG_ID> <task_name> <execution_date>: 
+		This is an example of the airflow tasks test command with arguments. 
+		It tests the task named <task_name> from the DAG identified by <DAG_ID> for the execution date <execution_date>.
+
+    airflow -h: 
+		This command displays the Airflow command-line interface help message. 
+		It lists all available commands and their brief descriptions.
+	
+	
+	
+-------------------------------
+
+airflow on docker 
+
+
+DAG
+
+	dependency
+	operator 
+		BashOperator
+		PythonOperator
+		.
+		.
+		CustomOperator
+	
+	
+	----------------------------------------
+	VSCode 
+----------------------------------------------------------------------------------------------------------------------------
+Extension 
+	Dev containers 
+	python 
+
+
+1. Introduction to Airflow: Architecture, concepts, DAGs, tasks, operators
+----------------------------------------------------------------------------------------------------------------------------
+
+How it works?
+
+Single node architecture 
+------------------------
+Reference: D:\PraiseTheLord\HSBGInfotech\Airflow
+	Web server fetches meta data from 
+		metastore 
+			disploay information 
+	Scheduler works with 
+		executor 
+	and 
+		metastore 
+			trigger DAG
+	executor 
+		updates metastore 
+			as tasks are completed.
+	Queue in executor 
+		executes tasks in order
+
+Multi node architecture 
+------------------------
+Reference: D:\PraiseTheLord\HSBGInfotech\Airflow
+
+Queue not internal to executor 
+Queue and Metastore would be on a diff. machine than 
+	Web server 
+	Scheduler 
+	Executor 
+	
+	Metastore 
+		can be Redis
+	Queue 
+		can be Rabit MQ 
+			spread tasks on multiple machines 
+			
+
+
+https://medium.com/@bageshwar.kumar/airflow-architecture-a-deep-dive-into-data-pipeline-orchestration-217dd2dbc1c3
+
+	DAGs (Directed Acyclic Graphs): 
+		Building blocks of workflows in Airflow. 
+		Define 
+			tasks and 
+			their dependencies
+		ensure a specific execution order.
+	Tasks: 
+		Individual units of work within a DAG. 
+		Each task run seperately 
+		Can be in 11 stages 
+			no_status
+			scheduled
+			queued
+			success
+			upstream_failed
+			up_for_reschedule
+			skipped 
+			up_for_retry 
+			failed
+			shutdown (if we abort)
+			
+			Refer TaskLifecycle.doc
+			
+			no_status
+				starts with this.
+				scheduler has creted an empty task instance
+				scheduler can go to 4 different status 
+					scheduled
+						scheduler determinted task instance needs to run 
+					removed 
+						why?
+					upstream_failed
+						task's upstream failed
+					skipped 
+						why?
+					
+					
+					
+			queued
+			success
+			up_for_reschedule
+			
+			up_for_retry 
+			failed
+			shutdown (if we abort)
+			
+		Airflow offers various built-in operators for 
+			tasks 
+				like 
+					data processing, 
+					database interaction, or 
+					triggering external scripts.
+	Operators: 
+		Reusable code components 
+			specific actions within a task. 
+		Airflow provides 
+			rich library of operators 
+			can create custom ones for specific needs.
+		e.g. 
+			python operator
+			action operator 
+			transfer operator
+			bash operator 
+			sensor operator 
+			deferrable operator 
+	Scheduler: 
+		The scheduler component 
+			automatically triggers DAG runs 
+			based on defined schedules or dependencies.
+		Scheduler deamon:
+			schedules workflow 
+	Web Interface : 
+		Airflow comes with a web interface 
+			for visualizing DAGs
+			monitoring task execution, and 
+			managing workflows.
+		Web server 
+			Flask server with Gunicorn serving the UI.
+	Metastore:
+		Database where the metadata are stored.
+		By default airflow uses SQLite
+			recommended for dev. env. only 
+	Trigger
+		Manage deferrable operators 
+		Helps to 
+			pause 
+			resume 
+				tasks 
+	Executor 
+		Class defining how your task should be executed.
+		e.g. 
+			kubernetes executor 
+			local executor 
+				etc.
+		executor doesn't execute 
+			but facilitates 
+	Worker: 
+		Process/sub process executing task.
+		
+	Airflow worker 
+		process that takes care of running the tasks 
+			defined in your workflows.  
+		grabs individual tasks 
+			from a queue and carrying them out.
+		There are different ways to manage airflow workers
+			popular option is 
+				Celery Executor
+					multiple workers running at once
+					helpful for handling big workloads.  
+					All the workers communicate with a queue 
+						to find tasks and avoid duplication of effort.	
+
+				Local Executor 
+					another option 
+				kubernetes executor
+					another option 
+		
+Getting Started with Airflow:
+
+
+	Official Airflow Documentation: 
+		https://airflow.apache.org/docs/
+	Tutorials: 
+		https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html
+	
+
+
+N.B: Airflow is NOT 
+		data streaming or data processing framework 
+		
+		
+
+
+-----------------------------------
+
+Create a folder in vscode 
+	open terminal 
+		pwd 
+			in same directory 
+		
+		
+docker --version
+docker-compose --version 
+or
+docker compose --version 
+
+curl 
+
+https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
+
+	https://airflow.apache.org/docs/apache-airflow/2.9.0/docker-compose.yaml
+	
+	in docker-compose.yaml make the following changes 
+		AIRFLOW__CORE__EXECUTOR: LocalExecutor
+	remove 
+		AIRFLOW__CELERY__RESULT_BACKEND 
+		AIRFLOW__CELERY__BROKEN_URL 
+
+		delete references for redis 
+		remove 	 and flower 
+		
+		
+	user/password: 
+		airflow/airflow 
+		
+		follow the airflow documentation instructions 
+		
+		------------------
+docker compose down -d 	
+change AIRFLOW__CORE__LOAD__EXAMPLE: 'true' to 'false #Stop loading example dag 
+docker compose up airflow-init 
+docker compose up -d
+
+		
+-------------------
+
+
+
+Lab: Refer hello.py 
+	docker build 
+	docker run 
+	docker ps
+	docker exec -it 
+	cd dags 
+	create a dag
+	ui doesnt show it (because scheduler is not running)
+	but 
+		airflow dags list 
+			shows it.
+			
+
+Steps to run airflow from docker-compose 
+		https://medium.com/@prithvijit.guha245/hello-world-airflow-docker-9102f4c5305b
+			mkdir -p ./dags ./logs ./plugins ./config
+			export AIRFLOW_UID=$(id -u)
+			echo -e "AIRFLOW_UID=$(id -u)" > .env
+			docker compose up -d 
+			docker compose up airflow-init
+		install vi
+			apt-get update apt-get install vim
+
+
+Reference: 
+	https://www.youtube.com/watch?v=K9AnJ9_ZAXE&list=PLwFJcsJ61oujAqYpMp1kdUBcPG0sE0QMT&index=1
+
+	https://github.com/coder2j/airflow-docker/tree/main/dags
+
+Why Airflow™?
+Airflow™ 
+	batch workflow orchestration platform. 
+	Airflow framework 
+		contains operators 
+			to connect with many technologies 
+			easily extensible 
+				to connect with a new technology. 
+				
+	Use Airflow if 
+		workflows have a clear 
+			start and end
+		run at regular intervals
+			they can be programmed as an Airflow DAG.
+
+	If you prefer coding over clicking
+		Airflow is the tool for you. 
+
+Workflows are defined as Python code:
+	Workflows can be stored in version control 
+		can roll back to previous versions
+		maintain versions
+		can be developed by multiple people simultaneously
+
+
+	Tests can be written to validate functionality
+
+	Components are extensible 
+		you can build on a wide collection of existing components
+	Rich scheduling and execution semantics 
+		enable you to easily define complex pipelines, 
+		running at regular intervals. 
+	Backfilling allows you to (re-)run pipelines on historical data 
+		after making changes to your logic. 
+	
+	ability to rerun partial pipelines 
+		after resolving an error helps maximize efficiency.
+	Diverse executors 
+		work with various platforms. 
+
+Airflow’s user interface provides:
+	In-depth views of two things:
+		Pipelines
+		Tasks
+
+Overview of your pipelines over time
+
+From the interface, you can 
+	inspect logs and 
+	manage tasks
+	
+	for example retrying a task in case of failure.
+
+
+Airflow was not built for 
+	infinitely running event-based workflows
+	a streaming solution
+		like kafka 
+	If you prefer clicking over coding
+		
+
+Install airflow 
+	https://airflow.apache.org/docs/apache-airflow/stable/start.html	
+		https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml
+		https://airflow.apache.org/docs/apache-airflow/2.2.1/docker-compose.yaml
+		
+prerequisites	
+	https://airflow.apache.org/docs/apache-airflow/stable/installation/prerequisites.html	
+	
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
+2. Workflow Management: Scheduling tasks, dependencies, error handling, retries.
+----------------------------------------------------------------------------------------------------------------------------
+
+
+1. Directed Acyclic Graphs (DAGs):
+
+    Airflow 
+		defines workflows as DAGs
+			acyclic graphs 
+				sequence of tasks.
+    Tasks (nodes) in a DAG 
+		depend on each other
+	downstream tasks 
+		wait for upstream tasks to complete 
+			successfully before execution.
+    Ensures a well-defined order of execution 	
+		for your data processing pipeline.
+
+2. Scheduling:
+	
+	Daemon which schedule workflows
+    Airflow provides 
+		flexible scheduling options 
+			for running tasks at specific intervals.
+    The schedule_interval 
+		parameter in a DAG definition 
+			can use cron-like expressions 
+				for scheduling (e.g., @daily, @hourly, @once).
+    Can set a 
+		start_date 
+			to define the initial execution time of the DAG.
+
+3. Dependencies:
+
+    Tasks 
+		can have dependencies 
+		on other tasks
+			ensure a specific execution order.
+    
+	upstream_task_id parameter in a task definition 
+		specifies the task(s) it depends on
+	Airflow will run downstream task 
+		after all its upstream tasks have finished successfully.
+    
+4. Operators:
+
+    Airflow provides a rich set of operators
+		pre-built Python classes 
+			represent specific actions in your workflow.
+    Operators 
+		can 
+			interact with various data sources
+			perform computations, 
+			trigger external services, and more.
+    Common operators include:
+        BashOperator: 
+			Executes Bash shell commands.
+        PythonOperator: 
+			Runs Python callables.
+        SQLOperator: 
+			Interacts with relational databases.
+        S3FileTransformOperator: 
+			Transforms files on Amazon S3.
+    You can also create custom operators to suit your specific needs.
+
+5. Error Handling and Retries:
+
+    Airflow tasks can fail due to 
+		network issues, 
+		software bugs, or 
+		unexpected data 
+			etc.
+    To handle errors gracefully
+		configure retries for tasks. 
+	The retries parameter 
+		determines the number of times a task 
+			should be retried upon failure 
+			(default: 0).
+    The retry_delay parameter 
+		defines the waiting period 
+			between retries 
+			(default: 300 seconds).
+    Airflow supports  
+		on_failure_callback function 
+			gets executed when a task fails. 
+
+		This function can be used for 
+			custom error handling, 
+			logging, or 
+			sending notifications.
+
+6. Monitoring and Visualization:
+
+    Airflow provides a 
+		user interface (UI) 
+			to visualize your DAGs, 
+		monitor task execution status, and 	
+		explore logs.
+    You can 
+		see the progress of running tasks, 
+		identify failures, and 
+		troubleshoot issues.
+
+Benefits of Workflow Management in Airflow:
+
+    Orchestration: 
+		Airflow streamlines complex data pipelines 
+			by coordinating the execution of dependent tasks.
+    Scalability: 
+		Airflow can handle large-scale workflows with 
+			numerous tasks running concurrently.
+    Reliability: 
+		Error handling and retries enhance 
+			workflow robustness, 
+			ensure tasks are 
+			retried upon failures.
+    Monitoring: 
+		The Airflow UI 
+			provides centralized visibility into your workflows, promoting efficient monitoring and troubleshooting.
+
+By leveraging these functionalities, Airflow empowers you to build robust, scalable, and maintainable data pipelines.
+
+
+Pending
+error handling, retries???
+https://stackabuse.com/handling-task-failures-in-airflow-a-practical-guide/
+
+https://www.restack.io/docs/airflow-faq-core-concepts-tasks-03
+
+
+https://www.youtube.com/watch?v=5QxqqeOxJhI
+	Compilation error 
+	1. a) vs code 
+		install python dependencies 
+		menu bar 
+			view 
+				Command Palette
+				Python: select interpreter 
+				Python (version) (venv) - select it 
+				
+		b) python dags/import_error_demo.py 
+			shows list of errors
+			fix it and rerun 
+			python dags/import_error_demo.py 
+		
+		c)airflow dags is 
+			should list airflow if there are no build time 
+	2) dag not showing up in the airflow 
+		dag_dir_list_interval 
+			5 min. 
+		check for this in airflow.cfg	
+			modify this and restart airflow 
+			docker  compose down
+			docker compose up 
+	3) continue 
+		https://www.youtube.com/watch?v=5QxqqeOxJhI
+
+----------------------------------------------------------------------------------------------------------------------------
+3. Data Pipelines: Building ETL pipelines with Python operators, using sensors and hooks.
+----------------------------------------------------------------------------------------------------------------------------
+
+Pending
+https://www.youtube.com/watch?v=eZfD6x9FJ4E
+	https://github.com/hnawaz007/pythondataanalysis/blob/main/ETL%20Pipeline/automate_etl_with_airflow.py
+	
+lab required 
+
+lab: 
+	run postgres and sqlserver 
+	create connections for both of them 
+	
+--------------------------------------
+
+To interact with those tools, the corresponding binaries must be installed where Airflow is installed.
+
+This project runs on Docker and the docker image used to run Airflow is built from other multiple Docker images.
+
+Openjdk image -> Hadoop -> Hive -> Spark -> Airflow
+
+That's why you can interact with Spark in the docker container of Airflow. Because the Airflow docker image is built FROM the docker image of Spark which is built from the Docker image of Hive and so on.
+
+Hope it makes sense,
+
+--------------------------------------
+
+
+
+Building ETL pipelines with Python operators in Airflow
+Airflow 
+	powerful orchestration tool 
+	allows you to schedule and manage complex workflows like ETL pipelines. 
+	Here's how Python operators can be utilized within Airflow for building robust ETL processes:
+
+1. Airflow DAGs:
+	In Airflow, 
+		ETL pipelines 
+			defined as Directed Acyclic Graphs (DAGs). 
+			A DAG represents the workflow, specifying tasks and their dependencies.
+
+2. Python Operators in Airflow:
+	Airflow 
+		rich set of built-in operators for various tasks. 
+		Python-based
+		leverage Python libraries like 
+			pandas and 
+			SQLAlchemy 
+				for data manipulation and interaction.
+
+3. Common Python Operators for ETL in Airflow:
+	PythonOperator: 
+		write custom Python code for any ETL step.
+	BashOperator: 
+		Executes bash commands for tasks 
+		For example
+			downloading data from a URL.
+	S3FileTransformOperator: 
+		Specifically designed for data transformation 
+			tasks on files stored in Amazon S3.
+	FileSensor: 
+		Waits for a specific file to appear before triggering the next task. Useful for ensuring data availability before processing.
+	
+
+4. Building an Airflow DAG for ETL:
+
+Here's a basic example demonstrating an ETL pipeline with Python operators in Airflow:
+
+Python
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+
+# Define DAG parameters
+default_args = {
+    'owner': 'airflow',
+    'start_date': '{{ var.value.etl_start_date }}',
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+with DAG(
+        dag_id='your_etl_dag',
+        default_args=default_args,
+        schedule_interval='@daily',
+) as dag:
+
+    # Wait for data file to arrive in S3
+    wait_for_data = S3KeySensor(
+        task_id='wait_for_data',
+        bucket_key='your_data_bucket/data.csv',
+        wildcard_match=True,  # Allow for different file versions
+    )
+
+    # Python function to read data from CSV and transform it
+    def extract_and_transform_data(**kwargs):
+        # Read data from CSV using pandas
+        data = pd.read_csv(kwargs['ti'].xcom_pull(task_ids='wait_for_data'))
+        # Perform data transformations
+        # ...
+        # Prepare data for loading
+        return processed_data
+
+    # Extract and transform data using PythonOperator
+    extract_transform_data = PythonOperator(
+        task_id='extract_transform_data',
+        provide_context=True,  # Pass data between tasks
+        python_callable=extract_and_transform_data,
+    )
+
+    # Load data into a Postgres table
+    load_data = PostgresOperator(
+        task_id='load_data',
+        postgres_conn_id='your_postgres_connection',
+        sql="""
+            INSERT INTO your_table (column1, column2)
+            VALUES (%s, %s);
+        """,
+        # Use xcom_pull to access processed data from previous task
+        params=lambda **kwargs: kwargs['ti'].xcom_pull(task_ids='extract_transform_data'),
+    )
+
+    # Define task dependencies
+    wait_for_data >> extract_transform_data >> load_data
+
+5. Advantages of using Python operators:
+
+	Flexibility: Python allows for complex data manipulation and logic within the pipeline.
+	Reusability: Custom Python functions can be reused across different ETL tasks or even workflows.
+	Integration with Libraries: Leverage the power of existing Python libraries like pandas and SQLAlchemy.
+Additional Considerations:
+
+	Error Handling: Implement proper error handling within Python functions to ensure your pipeline's robustness.
+	Logging: Use Airflow's logging capabilities to track the execution status of tasks and the overall pipeline.
+	Variables: Leverage Airflow variables to store sensitive information like database connection strings.
+By utilizing Python operators within Airflow, you can build scalable and maintainable ETL pipelines that effectively automate your data processing workflows.
+
+
+3 types of operators 
+	1. Action 
+		In Airflow
+			action operators 
+				workhorses of your Directed Acyclic Graphs (DAGs). 
+				define the specific tasks 
+				e.g. 
+					interact with different systems
+					control the flow of your pipeline.
+
+			Here's a breakdown of some common action operators in Airflow:
+
+				BashOperator: 
+					This operator executes bash commands directly on the Airflow worker machine. It's a simple way to run shell scripts within your DAG.
+
+				PythonOperator: 
+					This operator allows you to call Python functions defined in your code. It provides a flexible approach to write custom logic for your tasks.
+
+				KubernetesPodOperator: 
+					This operator executes tasks defined as Docker images within a Kubernetes Pod. It's useful for leveraging containerized applications in your pipeline.
+
+				SQL operators: 
+					various operators 
+						for interacting with different database platforms. 
+					Some examples include:
+						SnowflakeOperator: 
+							Executes SQL queries against a Snowflake database.
+						MySqlOperator: 
+							Executes SQL queries against a MySQL database.
+						PostgresOperator: 
+							Executes SQL queries against a PostgreSQL database.
+
+				EmailOperator: 
+					sends email notifications 
+						based on the success or failure of tasks in your DAG.
+
+				SlackAPIOperator: 
+					This operator 
+						allows you to send messages 
+							to a Slack channel for communication purposes.
+
+			These are just a few examples, and Airflow offers a vast collection of action operators. You can find a comprehensive list in the Airflow documentation, categorized by core functionalities and community providers:
+
+			https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/index.html
+
+			Choose the right action operator 
+				depends on the specific task 
+				Consider factors like the type of system you need to interact with, the programming language you prefer, and the desired level of control.
+	2. Transfer 
+		Transfer operators 
+			efficiently move data between different systems 
+			Streamline the process of 
+				data ingestion, 
+				transformation, 
+				export across various sources and destinations.
+
+		Here's a closer look at transfer operators:
+
+			Functionality: 
+				Transfer operators 
+					automate data movement 
+						between 
+							storage systems, 
+							databases, 
+							cloud platforms
+							other data sources. 
+					They simplify 
+						data exchange
+						reduce the need for custom scripting or 
+						complex data transfer logic within your DAGs.
+
+			Types of Transfer Operators: Airflow offers a variety of transfer operators, typically categorized by the systems they connect:
+
+				Cloud Storage Transfer Operators: 
+					These operators 
+						facilitate data transfer 
+							between various cloud storage platforms. 
+						Examples include transferring data between:
+								Google Cloud Storage (GCS) and Amazon S3
+								Azure Blob Storage and GCS
+								GCS and on-premises storage
+
+				Database Transfer Operators: 
+					These operators move data between different database systems.  
+					For instance, you can use them to migrate data from:
+						MySQL to PostgreSQL
+						Oracle to Snowflake
+						CSV files to a relational database
+
+				Local Transfer Operators: 
+					These operators handle data movement 
+						between local filesystems and other systems. 
+					example is 
+						FileToTaskOperator
+						uploads local files 
+							to an Airflow task for further processing.
+
+				Other Transfer Operators: 
+					operators for specific data transfer needs, such as:
+						S3KeySensor: 
+							Waits for a specific object to become available in an S3 bucket 
+								before proceeding with the DAG.
+						S3FileTransformOperator: 
+							Applies transformations to data files stored in S3.
+
+			Benefits of Using Transfer Operators:
+				Simplified Data Movement: 
+					Transfer operators 
+						structured and efficient way 
+							to handle data transfers
+						reduce manual intervention or complex code.
+				Error Handling: 
+					Many transfer operators 
+						built-in error handling mechanisms
+						ensuring data integrity and 
+						facilitate troubleshooting in case of failures.
+				Flexibility: 
+					variety of available transfer operators allows you to connect to diverse systems and cater to various data transfer scenarios within your DAGs.
+
+			Finding the Right Transfer Operator: 
+				When selecting a transfer operator, consider the following:
+					Source and destination systems involved in the data transfer.
+					The format of the data being transferred (e.g., CSV, JSON).
+					Any specific requirements for data transformation or error handling.
+
+		By leveraging transfer operators effectively, you can streamline data movement within your Airflow DAGs, promoting data pipeline efficiency and reliability.
+	3. Sensors 
+		In Airflow, sensor operators act as a control mechanism within your Directed Acyclic Graphs (DAGs). They pause task execution until a specific condition is met, ensuring tasks only run when ready. This helps orchestrate the flow of your pipeline and prevents downstream tasks from starting before their dependencies are fulfilled.
+
+Here's a comprehensive explanation of sensor operators in Airflow:
+
+Purpose:
+
+    Sensors essentially "wait" for something to happen before allowing downstream tasks in your DAG to proceed.
+    This waiting period can be based on various criteria, such as:
+        The arrival of new data
+        The completion of a previous task
+        A specific time or date
+        An external event or signal
+
+Benefits of Using Sensor Operators:
+
+    Improved DAG Reliability: Sensors prevent downstream tasks from running on incomplete or unavailable data, ensuring reliable pipeline execution.
+    Streamlined Workflow: Sensors help orchestrate the flow of your DAG, guaranteeing tasks only begin when their dependencies are met.
+    Event-Driven Workflows: Sensors enable you to create event-driven DAGs, where tasks are triggered by specific occurrences.
+
+		Types of Sensor Operators:
+
+		Airflow provides a rich set of sensor operators to cater to different waiting conditions:
+
+			File Sensor Operators:
+				FileSensor: Waits for a specific file to appear in a designated location.
+				FilePatternSensor: Waits for a file matching a particular pattern to become available.
+				転送完了センサー (転送完了センサー translates to 'Transfer Sensor' in Japanese): (
+				Assuming you're using the Japanese localization) This sensor might check for the completion of a data transfer process.
+
+			Time Sensor Operators:
+				TimeSensor: Pauses execution until a specific date and time is reached.
+				TimeDeltaSensor: Waits for a predefined time interval to elapse before proceeding.
+				CronSensor: Triggers a task based on a cron expression schedule.
+
+			External Sensor Operators:
+				ExternalTaskSensor: Waits for a specific upstream task in your DAG to finish successfully.
+				HttpSensor: Checks the status code of a web request and proceeds only if it meets a defined criteria.
+				BashSensor: Executes a bash command and waits for it to return a successful exit code.
+
+			Other Sensor Operators:
+				HivePartitionSensor: Waits for a specific partition in a Hive table to become available.
+				S3KeySensor: Pauses execution until a particular object appears in an S3 bucket.
+				DataQualitySensor: Uses custom logic to determine data quality before proceeding.
+
+		Choosing the Right Sensor Operator:
+
+		The choice of sensor operator depends on the specific condition you want to wait for in your DAG. Consider factors like:
+
+			The type of event or data you're waiting for (file arrival, time, external task completion).
+			The desired scheduling pattern (specific time, time interval, cron expression).
+			Any custom logic needed for data quality checks.
+
+		By effectively utilizing sensor operators, you can create well-orchestrated and robust Airflow DAGs that execute tasks only when the necessary conditions are satisfied.
+-----------------
+sensors and hooks 
+-----------------
+
+
+In Airflow, the Python executor plays a crucial role in executing tasks defined within your workflows (DAGs). Here's a breakdown of how sensors and hooks interact with the Python executor:
+
+Sensors:
+
+Sensors are special operators in Airflow that pause task execution until a specific condition is met.  The Python executor keeps these sensor tasks running until the condition is satisfied.
+
+There are various types of sensors available, each suited to different scenarios. Some common examples include:
+
+	FileSensor: 
+		Waits for a file to appear at a specific location.
+	S3KeySensor: 
+		Waits for a particular object to become available in an S3 bucket.
+	HttpSensor: 
+		Checks if a URL is reachable and optionally verifies its content.
+	TimeSensor: 
+		Waits until a specific date and time is reached.
+	ExternalTaskSensor: 
+		Waits for a task in another DAG to finish successfully.
+When using sensors with the Python executor:
+
+The Python executor schedules the sensor task.
+The sensor task continuously checks its defined condition (e.g., checking for a file every minute).
+If the condition is not met, the sensor task remains running, occupying a worker slot in the Python executor. This can be inefficient for long-running conditions.
+Once the condition is met, the sensor task succeeds, and the Python executor can then schedule and execute the downstream tasks that depend on the sensor.
+Hooks:
+
+Hooks are a way to interact with external systems and resources within your Python operator code. They encapsulate low-level details and provide a consistent interface for tasks to access these resources.
+Common examples of hooks include:
+	BaseHook: 
+		Provides basic authentication and connection management functionalities.
+	S3Hook: 
+		Interacts with Amazon S3 for tasks like uploading or downloading files.
+	PostgresHook: 
+		Connects to a PostgreSQL database and allows executing SQL queries.
+	FileSystemHook: 
+		Interacts with the local file system for tasks like creating or deleting directories.
+	Hooks are used within Python operator code. The Python executor does not directly manage hooks.
+Your Python operator code retrieves the necessary hook using its connection details. For instance, you might use PostgresHook to connect to a database and execute queries within your data processing logic.
+
+Key Points:
+
+	Sensors are managed by the Python executor, pausing task execution until their conditions are met.
+	Hooks are used within Python operator code to interact with external systems and resources.
+	Consider using the reschedule mode for long-running sensor conditions to free up worker slots in the Python executor.
+Additional Notes:
+
+	Airflow offers other executors besides Python, like CeleryExecutor or KubernetesExecutor. However, the core concepts of sensors and hooks remain applicable.
+	Best practices recommend using clear and concise sensor conditions to avoid unnecessary delays in your workflows.
+
+----------------------------------------------------------------------------------------------------------------------------
+4. Airflow UI: Monitoring tasks, DAG runs, logs, alerts
+----------------------------------------------------------------------------------------------------------------------------
+
+lab required 
+
+Airflow UI: Your One-Stop Shop for Monitoring Workflows
+
+Airflow UI equips you with a robust set of tools to monitor your workflows (DAGs) and their individual tasks. Here's a breakdown of how you can leverage it for:
+
+1. Monitoring Tasks:
+
+    DAGs View: This is your starting point. It presents a list of all DAGs, offering a quick health check:
+        Task Status Overview: See the number of tasks and their success/failure/running status in the most recent run.
+        Schedule/Trigger Type: Identify if the DAG is scheduled or triggered manually.
+
+    DAG Details Page: Dive deeper into a specific DAG by clicking its name. Here, monitoring gets granular:
+        Graph/Tree View: Visualize the DAG structure. Nodes represent tasks, and colors indicate their status (green for success, red for failure, etc.).
+        Gantt Chart: Track task execution timelines within a DAG run. Identify bottlenecks or delays.
+        Code View: Understand the DAG's logic by inspecting the defining Python code.
+        Run Details: Access information about individual DAG runs, including start/end times, overall status, and detailed task instance logs.
+
+    Task Instance Details: Click a specific task name to see its execution details:
+        Task Logs: View standard output and error logs for troubleshooting and debugging.
+        Execution Duration: Check how long the task took to run.
+        Retries: See how many attempts were made before success or failure (if retries are configured).
+        Details: Get additional information specific to the task type, like the operator used and custom parameters.
+
+2. Monitoring DAG Runs:
+
+    DAGs View: Quickly assess the status of the latest run for each DAG.
+    DAG Details Page: Within "Run Details," explore information specific to individual DAG runs:
+        Start/End Time: Track the duration of the entire DAG execution.
+        Overall Status: See if the run succeeded or failed.
+        Task Instance Details: Access detailed logs and execution data for each task within the run.
+
+3. Monitoring Logs:
+
+    Task Instance Details: Access standard output and error logs generated by individual tasks.
+    Filter and Search: Narrow down logs by specific DAGs, tasks, execution dates, or keywords.
+
+4. Alerts and Notifications (Optional):
+
+While not built-in, Airflow integrates with external notification systems. You can set up alerts for:
+
+    Task failures
+    Excessively long task execution times
+
+This proactive approach allows you to be notified of potential issues within your workflows.
+
+Effective Monitoring Practices:
+
+    Utilize filters and search functions to focus on specific tasks or runs.
+    Leverage the Gantt chart to identify bottlenecks and optimize execution times.
+    Regularly review task logs for troubleshooting and identifying recurring issues.
+    Set up alerts to be notified of critical events (if using external notification systems).
+
+By mastering Airflow UI's monitoring features, you can maintain complete control over your workflows, ensuring smooth and efficient execution.
+
+----------------------------------------------------------------------------------------------------------------------------
+5. Best Practices: Scaling, performance optimization, security, maintenance
+----------------------------------------------------------------------------------------------------------------------------
+
+install docker 
+k create ns airflow 
+install helm 
+	https://helm.sh/docs/intro/install/
+install airflow from below 	
+	https://airflow.apache.org/docs/helm-chart/stable/quick-start.html
+install kubectl from below 
+	https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/	
+
+helm install airflow apache-airflow/airflow -n airflow --debug
+	note: username and pwd 
+kubectl port-forward svc/airflow-webserver 8080:8080 -n airflow 
+
+
+helm pull $RELEASE_NAME apache-airflow/airflow --namespace $NAMESPACE  --untar 
+helm pull apache-airflow/airflow --untar 
+
+
+When using the Kubernetes executor in Airflow, you can leverage Kubernetes's capabilities to achieve better scaling, performance, security, and maintainability for your workflows. Here are some best practices to consider:
+
+Scaling:
+
+Horizontal Pod Autoscaler (HPA): Utilize HPA to automatically scale your worker pods based on resource utilization (CPU, memory). This ensures you have enough workers to handle peak workloads without manual intervention.
+Resource Requests and Limits: Set appropriate resource requests (minimum required) and limits (maximum allowed) for your worker pods. This helps Kubernetes schedule pods efficiently and prevents resource starvation.
+Performance Optimization:
+
+Container Image Optimization: Use minimal container base images and optimize them for your specific needs. This reduces image size and improves startup time.
+Caching: Leverage Kubernetes's built-in ConfigMaps and Secrets for caching frequently used configuration data. This reduces container image size and avoids redundant fetches.
+Pod Disruption Budget (PDB): Configure PDBs to prevent accidental pod disruptions during upgrades or scaling events. This ensures critical tasks continue running with minimal downtime.
+Security:
+
+RBAC (Role-Based Access Control): Implement RBAC to restrict access to Kubernetes resources (pods, deployments) based on user roles. This minimizes the attack surface and prevents unauthorized modifications.
+Network Policies: Utilize network policies to control network traffic between pods and external services. This isolates your workflows and prevents unintended communication.
+Secrets Management: Store sensitive data like passwords and API keys in Kubernetes Secrets and mount them securely within your pods. Avoid hardcoding secrets in Airflow code or container images.
+Maintenance:
+
+Liveness and Readiness Probes: Implement liveness and readiness probes in your worker deployments. Liveness probes ensure pods are restarted if they become unhealthy, while readiness probes guarantee pods are ready to receive tasks.
+Logging and Monitoring: Stream logs from your worker pods and Airflow scheduler to a centralized logging platform. Integrate monitoring tools with Kubernetes to track resource utilization and identify potential bottlenecks.
+Version Control: Use version control for your Airflow DAGs and Kubernetes configurations ( deployments, secrets). This facilitates rollbacks and enables easier collaboration.
+
+----------------------------------------------------------------------------------------------------------------------------
+6. Backend postgres database
+----------------------------------------------------------------------------------------------------------------------------
+Airflow is designed to work seamlessly with PostgreSQL as its backend database. Here's a breakdown of the key aspects of using Airflow with a Postgres database:
+
+Benefits of Using Postgres with Airflow:
+
+    Reliability: PostgreSQL is a robust and reliable open-source database management system, making it a secure choice for storing Airflow metadata.
+    Scalability: Postgres can handle large datasets efficiently, making it suitable for storing the metadata of complex workflows with numerous tasks.
+    Features: Postgres offers features like ACID transactions and rich data types, which are well-suited for Airflow's data management needs.
+    Community Support: A large and active community supports Postgres, providing extensive documentation and resources.
+
+Setting Up Airflow with Postgres:
+
+    Install and Configure Postgres: Install and configure a Postgres database server. Ensure you have a user and database dedicated for Airflow.
+    Airflow Configuration: In your airflow.cfg file, set the following configurations under the [core] section:
+
+    sql_alchemy_conn: This specifies the connection string to your Postgres database. It typically includes details like hostname, port, username, password, and database name.
+
+    Initialize the Database: Use the airflow db init command to create the necessary tables in your Postgres database.
+
+Using Airflow with Postgres:
+
+    Airflow stores all its metadata (DAG definitions, task instances, execution details) within the Postgres database.
+    The SqlAlchemy library is used as an ORM (Object Relational Mapper) to interact with the Postgres database from Python code.
+
+Important Considerations:
+
+    Security: Properly configure user permissions within Postgres to ensure only authorized users can access Airflow metadata.
+    Performance:
+        Consider connection pooling to optimize communication between Airflow and the database.
+        Regularly vacuum and analyze your Postgres tables to maintain optimal performance.
+    Database Backups: Implement a regular backup strategy for your Postgres database to ensure data recovery in case of failures.
+
+Alternatives to Postgres:
+
+While Postgres is a popular choice, Airflow also supports other database backends like MySQL, SQLite (for development purposes only), and Oracle. The choice often depends on factors like existing infrastructure, familiarity, and specific feature requirements.
+
+Additional Resources:
+
+    Airflow Documentation on Setting Up the Database: https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html
+    PostgreSQL Documentation: https://www.postgresql.org/docs/
+
+----------------------------------------------------------------------------------------------------------------------------
+Milestone Assessment:
+----------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------
+1. Design and develop a simple Airflow DAG for a data pipeline (e.g., data ingestion, transformation, analysis)
+----------------------------------------------------------------------------------------------------------------------------
+
+Refer pipelines
+
+D:\PraiseTheLord\HSBGInfotech\Airflow\airflow-materials\airflow-materials\airflow-section-3\start.sh 
+
+login 
+	ip:8080/
+	user: airflow/airflow 
+	Admin 
+		connections 
+		id: forex_api (should match with dag mentioned)
+			Check code of dag - http_conn_id in it 
+				http://34.203.33.236:8080/code?dag_id=forex_data_pipeline&root=
+		content_type: http 
+		url: copy domain name only from D:\PraiseTheLord\HSBGInfotech\Airflow\airflow-materials\airflow-materials\airflow-section-3\docs\url.txt
+			https://gist.github.com	save 
+		Save 
+		
+	docker exec -it airflow bash
+	or 
+	docker exec -it <container id of airflow running on 8080> bash
+	test the task 
+		airflow tasks test <task id> <old time>
+		airflow tasks test connections forex_data_pipeline is_forex_rates_available  2021_01_01
+		
+		
+			
+
+----------------------------------------------------------------------------------------------------------------------------
+2. Quiz to evaluate understanding of DAG concepts, scheduling, and error handling.
+----------------------------------------------------------------------------------------------------------------------------
+DAG Concepts:
+
+    What is a DAG in Apache Airflow?
+        Answer: A DAG (Directed Acyclic Graph) is a collection of tasks with defined dependencies that must be executed in a specific order.
+
+    What is the difference between a DAG and a task in Airflow?
+        Answer: A DAG represents the entire workflow, while a task represents a unit of work within that workflow.
+
+    What is a Directed Acyclic Graph (DAG)?
+        Answer: A DAG is a graph consisting of nodes (tasks) connected by directed edges (dependencies) where no cycles exist.
+
+    What is a task dependency in Airflow?
+        Answer: Task dependency defines the order in which tasks should be executed. Tasks can depend on the completion of other tasks before they can start.
+
+    How are task dependencies defined in Airflow?
+        Answer: Task dependencies are defined using the set_downstream and set_upstream methods or using the bitshift operators (>> and <<).
+
+Scheduling:
+
+    What is scheduling in Apache Airflow?
+        Answer: Scheduling in Airflow refers to the process of determining when each task within a DAG should be executed.
+
+    How can you schedule a DAG to run at a specific time in Airflow?
+        Answer: You can use the schedule_interval parameter in the DAG definition to specify a cron expression or a timedelta for scheduling.
+
+    What is a cron expression?
+        Answer: A cron expression is a string representing a schedule, commonly used in Unix-like operating systems for specifying the timing of tasks.
+
+    How does Airflow handle missed or skipped DAG runs?
+        Answer: Airflow allows for backfilling missed or skipped DAG runs based on the catchup parameter in the DAG definition.
+		
+---------------------------------------------
+In Apache Airflow, a "catchup" parameter in a DAG (Directed Acyclic Graph) refers to whether or not Airflow should backfill the DAG with historical runs for the interval between its start_date and the current date when the DAG is first created or enabled.
+
+When catchup is set to True, Airflow will trigger and execute all the missed runs for the DAG tasks from the start_date up to the current date, ensuring that no runs are missed. This is useful when setting up a new DAG or when a DAG is paused for a period and then resumed.
+
+On the other hand, when catchup is set to False, Airflow will only execute tasks for the current interval onwards, ignoring any past intervals. This is useful when you only want to run tasks for the current interval onwards and don't need to backfill historical data.
+
+Setting catchup to False can be beneficial in scenarios where you have a large number of historical runs and want to avoid unnecessary processing or when the DAG's tasks are idempotent and can be rerun independently of past runs.
+---------------------------------------------		
+		
+
+    How can you trigger a DAG run manually in Airflow?
+        Answer: You can trigger a DAG run manually from the Airflow Web UI or using the command-line interface (airflow trigger_dag).
+
+Error Handling:
+
+    What are some common types of errors that can occur in Airflow tasks?
+        Answer: Common errors include task failures, timeouts, connectivity issues, and resource constraints.
+
+    How can you handle errors in Airflow tasks?
+        Answer: Errors in Airflow tasks can be handled using task retries, task failure callbacks, or by defining error handling logic within the task.
+
+    What is task retry in Airflow?
+        Answer: Task retry is the mechanism in Airflow that automatically re-executes a task a specified number of times upon failure.
+
+    How can you configure task retries in Airflow?
+        Answer: Task retries are configured using the retries and retry_delay parameters in the task definition.
+
+    What is a task failure callback in Airflow?
+        Answer: A task failure callback is a function that is executed when a task fails. It can be used to perform custom error handling or cleanup actions.
+
+Advanced Concepts:
+
+    What are sensors in Apache Airflow?
+        Answer: Sensors are specialized tasks in Airflow that wait for a certain condition to be met before proceeding with the workflow.
+
+    How do you define a sensor in Airflow?
+        Answer: Sensors are defined using sensor classes provided by Airflow (e.g., ExternalTaskSensor, HttpSensor) and configured with parameters specific to the sensor type.
+
+    What is task rescheduling in Airflow?
+        Answer: Task rescheduling in Airflow refers to the process of re-executing a task with a new execution date and time.
+
+    How does Airflow handle task rescheduling?
+        Answer: Airflow automatically reschedules tasks if their execution is delayed due to backfilling, catchup, or scheduling changes.
+
+    What is task execution context in Airflow?
+        Answer: Task execution context refers to the context in which a task is executed, including metadata such as the task instance, DAG run, and execution date.
+
+Best Practices:
+
+    What are some best practices for designing Airflow DAGs?
+        Answer: Best practices include keeping DAGs small and modular, using task dependencies effectively, enabling idempotent tasks, and writing clear documentation.
+
+    How can you improve the performance of Airflow DAGs?
+        Answer: Performance can be improved by optimizing task concurrency, parallelism, and resource allocation, as well as minimizing dependencies and reducing task execution times.
+
+    What is idempotence, and why is it important in Airflow?
+        Answer: Idempotence refers to the property of operations where applying the operation multiple times has the same effect as applying it once. It's important in Airflow to ensure tasks can be safely retried without causing side effects.
+
+    How can you ensure idempotence in Airflow tasks?
+        Answer: Idempotence can be ensured by designing tasks to be idempotent, handling retries and failures gracefully, and using transactional or idempotent operations when interacting with external systems.
+
+    What are some considerations for error handling and logging in Airflow?
+        Answer: Considerations include enabling logging for tasks and operators, defining custom error handlers and callbacks, and configuring alerts or notifications for task failures.
+
+Integration and Extensibility:
+
+    How can you integrate Apache Airflow with external systems or services?
+        Answer: Airflow provides operators, sensors, and hooks for integrating with various external systems such as databases, cloud providers, messaging queues, and APIs.
+
+    What are Airflow hooks?
+        Answer: Airflow hooks are a set of reusable classes for interacting with external systems or services, providing a consistent interface for tasks to communicate with external resources.
+
+    How can you extend Airflow with custom operators or plugins?
+        Answer: Airflow allows you to define custom operators, sensors, hooks, and executors by subclassing existing Airflow classes or implementing new functionality using Python.
+
+    What is the Airflow Plugin system?
+        Answer: The Airflow Plugin system allows users to extend Airflow's functionality by adding custom operators, sensors, hooks, or macros in the form of plugins.
+
+    How do you install and manage Airflow plugins?
+        Answer: Airflow plugins can be installed by placing Python files or directories containing plugin code in the plugins directory of the Airflow installation, or by using the Airflow Plugin Manager CLI.
+
+Monitoring and Debugging:
+
+    What are some tools or methods for monitoring Airflow DAGs?
+        Answer: Monitoring tools include the Airflow Web UI, command-line interface (CLI), logging, metrics and monitoring systems (e.g., Prometheus, Grafana), and external observability tools.
+
+    How can you monitor the performance of Airflow tasks?
+        Answer: Performance metrics such as task execution times, task retries, task failures, and resource utilization can be monitored using Airflow's built-in monitoring features or external monitoring tools.
+
+    What are some common debugging techniques for Airflow DAGs?
+        Answer: Common debugging techniques include examining task logs, reviewing DAG code and configuration, enabling verbose logging, using breakpoints and debuggers, and monitoring task dependencies and scheduling behavior.
+		
+		
+----------------------------------------------------------------------------------------------------------------------------
+3. Case Study: Analyze a real-world Airflow DAG (provided or chosen) and suggest.
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------	
+
+
+
+
+
+
+Installing aiflow step by step 
+	
+
+
+
+
+Workflow Management: Scheduling tasks, dependencies, error handling, retries.
+	dependencies 
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/15820186#overview
+	retry 
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/16506380#overview
+Data Pipelines: Building ETL pipelines with Python operators, using sensors and hooks.
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/15819682#overview
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/15819696#overview
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/15820182#overview
+	
+Airflow UI: Monitoring tasks, DAG runs, logs, alerts
+Best Practices: Scaling, performance optimization, security, maintenance
+	Monitoring
+		https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/16131943#overview
+
+	Security 
+		https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/16131971#overview
+Backend postgres database
+	https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/15893584#overview
+	is this backend?
+Case Study: Analyze a real-world Airflow DAG (provided or chosen) and suggest.
+
+https://www.udemy.com/course/the-ultimate-hands-on-course-to-master-apache-airflow/learn/lecture/16574666#overview
+
+
+Steps to deploy a dag
+----------------------------------------------------------------
+1. Develop and Test Your DAG:
+
+    Write your DAG: Use Python to define your DAG tasks, dependencies, and schedule. Airflow provides various operators to handle different tasks like data processing, database interactions, or system calls.
+    Test your DAG locally: Run your DAG locally using the airflow dags test command with the DAG ID to identify any errors or issues before deployment.
+
+2. Place Your DAG in the DAGs Folder:
+
+    Locate the DAGs folder within your Airflow installation directory. This is where Airflow searches for DAG definition files.
+    Place your Python file containing the DAG definition within this DAGs folder.
+
+3. Update Airflow:
+
+    There are two ways to inform Airflow about your new DAG:
+        Airflow Web UI: If using the Airflow web UI, navigate to the DAGs section and click the Refresh button. 
+			This instructs Airflow to scan the DAGs folder for new or updated DAG files.
+        Command-Line: 
+			Use the airflow dags clear command followed by the airflow scheduler reload command. 
+			This clears existing DAG runs and reloads the scheduler to recognize your new DAG.
+
+4. (Optional) Set Up Connections (if applicable):
+
+    If your DAG interacts with external resources like databases or cloud services, you'll need to define connections within Airflow.
+    Connections provide secure storage for credentials and connection details required by your DAG tasks. You can define connections in the Airflow web UI or using a configuration file.
+
+5. Trigger Your DAG (Optional):
+
+    By default, Airflow runs DAGs based on the defined schedule. However, you can also manually trigger a DAG run using the Airflow UI or the airflow dags trigger command with the DAG ID.
+
+Additional Considerations:
+
+    Version Control: Use a version control system (like Git) to manage your DAG code. This allows for tracking changes, collaboration, and easy rollback if needed.
+    Security: Implement access control mechanisms within Airflow to restrict users from modifying or triggering sensitive DAGs.
+    Monitoring: Utilize Airflow UI or external monitoring tools to track DAG run progress, identify errors, and ensure smooth execution.
+
+By following these steps, you can effectively deploy your DAG in Airflow and manage your workflows efficiently. Remember, the specific deployment process might vary slightly depending on your Airflow environment and chosen configuration.
+
+----------------------------------------------------------------
